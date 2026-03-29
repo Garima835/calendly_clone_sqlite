@@ -21,7 +21,7 @@ app.post('/api/auth/register', (req, res) => {
    ✅ CLEAN & WORKING CORS CONFIG
 ===================================================== */
 app.use(cors({
-    origin: ['https://calendlybackend.netlify.app', 'http://localhost:5173'],
+    origin: ['https://calendly-clone-sqlite.vercel.app', 'http://localhost:5173'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
