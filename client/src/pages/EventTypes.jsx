@@ -1,592 +1,490 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import API from '../utils/api';
-import { FiPlus, FiEdit2, FiTrash2, FiExternalLink, FiCopy, FiClock, FiMapPin } from 'react-icons/fi';
+import {
+  FiPlus, FiClock, FiCalendar, FiUsers, FiSearch, FiChevronDown, 
+  FiGrid, FiSettings, FiHelpCircle, FiLink, FiMoreVertical, 
+  FiExternalLink, FiRepeat, FiBarChart2
+} from 'react-icons/fi';
 import { showToast } from '../utils/toast';
 
-export default function EventTypes() {
-    const [eventTypes, setEventTypes] = useState([]);
-    const [loading, setLoading] = useState(true);
+export default function Dashboard() {
+  const navigate = useNavigate();
+  const [eventTypes, setEventTypes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-    useEffect(() => {
-        loadEventTypes();
-    }, []);
+  useEffect(() => {
+    loadEventTypes();
+  }, []);
 
-    const loadEventTypes = async () => {
-        try {
-            const res = await API.get('/event-types');
-            setEventTypes(res.data);
-        } catch (error) {
-            showToast('Failed to load event types', error.message);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const deleteEventType = async (id) => {
-        if (!window.confirm('Delete this event type? All its bookings will also be deleted.')) return;
-        try {
-            await API.delete(`/event-types/${id}`);
-            showToast('Event type deleted');
-            loadEventTypes();
-        } catch (error) {
-            showToast(error.response?.data?.message || 'Failed to delete', 'error');
-        }
-    };
-
-    const copyLink = (etId) => {
-        const link = `${window.location.origin}/book/${etId}`;
-        navigator.clipboard.writeText(link).then(() => {
-            showToast('Link copied!');
-        });
-    };
-
-    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-    if (loading) {
-        return (
-            <div className="page-loading">
-                <div className="spinner"></div>
-                <style>{styles}</style>
-            </div>
-        );
+  const loadEventTypes = async () => {
+    try {
+      const res = await API.get('/event-types');
+      setEventTypes(res.data);
+    } catch (error) {
+      console.error('Failed to load event types', error);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    return (
-        <div className="et-page">
-            <div className="et-header">
-                <div>
-                    <h1>Event Types</h1>
-                    <p>Create and manage the meetings people can book with you</p>
-                </div>
-                <Link to="/event-types/new" className="btn btn-primary">
-                    <FiPlus /> New Event Type
-                </Link>
-            </div>
+  const copyLink = (etId) => {
+    const link = `${window.location.origin}/book/${etId}`;
+    navigator.clipboard.writeText(link).then(() => {
+      showToast('Link copied to clipboard!');
+    });
+  };
 
-            {eventTypes.length === 0 ? (
-                <div className="empty-state">
-                    <FiClock size={48} />
-                    <h3>No event types yet</h3>
-                    <p>Create your first event type to start accepting bookings</p>
-                    <Link to="/event-types/new" className="btn btn-primary">
-                        <FiPlus /> Create Event Type
-                    </Link>
-                </div>
-            ) : (
-                <div className="et-grid">
-                    {eventTypes.map(et => (
-                        <div key={et._id} className={`et-card ${!et.isActive ? 'et-card-inactive' : ''}`}>
-                            <div className="et-card-color" style={{ background: et.color || '#0D9488' }}></div>
-                            <div className="et-card-body">
-                                <div className="et-card-top">
-                                    <h3>{et.title}</h3>
-                                    {!et.isActive && <span className="status-badge status-cancelled">Inactive</span>}
-                                </div>
-                                {et.description && <p className="et-card-desc">{et.description}</p>}
-                                <div className="et-card-details">
-                                    <span><FiClock /> {et.duration} min</span>
-                                    <span><FiMapPin /> {et.location || 'Online'}</span>
-                                </div>
-                                <div className="et-card-days">
-                                    {et.availableDays.map(d => (
-                                        <span key={d} className="day-chip">{dayNames[d]}</span>
-                                    ))}
-                                </div>
-                                <div className="et-card-time">
-                                    {et.startTime} – {et.endTime}
-                                </div>
-                                <div className="et-card-meta">
-                                    {et.bookingCount} booking{et.bookingCount !== 1 ? 's' : ''}
-                                </div>
-                                <div className="et-card-actions">
-                                    <button className="btn btn-ghost btn-sm" onClick={() => copyLink(et._id)}>
-                                        <FiCopy /> Copy Link
-                                    </button>
-                                    <a
-                                        href={`/book/${et._id}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="btn btn-ghost btn-sm"
-                                    >
-                                        <FiExternalLink /> Preview
-                                    </a>
-                                    <Link to={`/event-types/${et._id}/edit`} className="btn btn-ghost btn-sm">
-                                        <FiEdit2 /> Edit
-                                    </Link>
-                                    <button
-                                        className="btn btn-ghost btn-sm btn-danger-text"
-                                        onClick={() => deleteEventType(et._id)}
-                                    >
-                                        <FiTrash2 /> Delete
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
-            <style>{styles}</style>
+  if (loading) return <div className="loading-screen">Loading...</div>;
+
+  return (
+    <div className="calendly-container">
+      {/* --- SIDEBAR --- */}
+      <aside className="sidebar">
+        <div className="sidebar-logo">
+          <div className="logo-icon">C</div>
+          <span className="logo-text">Calendly</span>
         </div>
-    );
+
+        <button className="btn-sidebar-create" onClick={() => navigate('/event-types/new')}>
+          <FiPlus /> Create
+        </button>
+
+        <nav className="sidebar-nav">
+          <div className="nav-item active"><FiLink /> Scheduling</div>
+          <div className="nav-item"><FiCalendar /> Meetings</div>
+          <div className="nav-item"><FiClock /> Availability</div>
+          <div className="nav-item"><FiUsers /> Contacts</div>
+          <div className="nav-item"><FiRepeat /> Workflows</div>
+          <div className="nav-item"><FiGrid /> Integrations & apps</div>
+          <div className="nav-item"><FiRepeat /> Routing</div>
+        </nav>
+
+        <div className="sidebar-footer">
+          <div className="nav-item upgrade"><span className="coin-icon">$</span> Upgrade plan</div>
+          <div className="nav-item"><FiBarChart2 /> Analytics</div>
+          <div className="nav-item"><FiSettings /> Admin center</div>
+          <div className="nav-item">
+            <FiHelpCircle /> Help <FiChevronDown style={{ marginLeft: 'auto' }} />
+          </div>
+        </div>
+      </aside>
+
+      {/* --- MAIN CONTENT --- */}
+      <main className="main-content">
+        <header className="top-header">
+          <div className="header-right">
+            <div className="user-profile">
+              <div className="avatar">G</div>
+              <FiChevronDown />
+            </div>
+            <button className="btn-header-create">
+              <FiPlus /> Create <FiChevronDown />
+            </button>
+          </div>
+        </header>
+
+        <div className="content-inner">
+          <div className="page-title">
+            <h1>Scheduling <FiHelpCircle className="info-icon" /></h1>
+          </div>
+
+          <div className="tab-navigation">
+            <button className="tab active">Event types</button>
+            <button className="tab">Single-use links</button>
+            <button className="tab">Meeting polls</button>
+          </div>
+
+          <div className="search-bar">
+            <FiSearch className="search-icon" />
+            <input type="text" placeholder="Search event types" />
+          </div>
+
+          <div className="user-info-row">
+            <div className="user-identity">
+              <div className="small-avatar">G</div>
+              <span className="user-name">Garima Gupta</span>
+            </div>
+            <div className="view-landing-page">
+              <FiExternalLink /> View landing page
+              <FiMoreVertical className="more-icon" />
+            </div>
+          </div>
+
+          {/* --- EVENT TYPE LIST --- */}
+          <div className="event-list">
+            {eventTypes.length > 0 ? (
+              eventTypes.map((et) => (
+                <div key={et._id} className="event-row-card">
+                  <div className="accent-bar" style={{ background: et.color || '#8145f4' }}></div>
+                  <div className="card-inner">
+                    <div className="card-left">
+                      <input type="checkbox" className="custom-checkbox" />
+                      <div className="event-details">
+                        <h3>{et.title}</h3>
+                        <p>{et.duration} min • Google Meet • One-on-One</p>
+                        <span className="availability">Weekdays, 9 am - 5 pm</span>
+                      </div>
+                    </div>
+                    <div className="card-right">
+                      <button className="btn-copy-link" onClick={() => copyLink(et._id)}>
+                        <FiLink /> Copy link
+                      </button>
+                      <FiMoreVertical className="more-dots" />
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              /* Fallback/Sample Item matching the image exactly */
+              <div className="event-row-card">
+                <div className="accent-bar purple"></div>
+                <div className="card-inner">
+                  <div className="card-left">
+                    <input type="checkbox" className="custom-checkbox" />
+                    <div className="event-details">
+                      <h3>30 Minute Meeting</h3>
+                      <p>30 min • Google Meet • One-on-One</p>
+                      <span className="availability">Weekdays, 9 am - 5 pm</span>
+                    </div>
+                  </div>
+                  <div className="card-right">
+                    <button className="btn-copy-link">
+                      <FiLink /> Copy link
+                    </button>
+                    <FiMoreVertical className="more-dots" />
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </main>
+
+      <style>{dashboardStyles}</style>
+    </div>
+  );
 }
 
-const styles = `
-    /* Page Container */
-    .et-page {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: clamp(20px, 5vw, 40px);
-        min-height: 100vh;
-        background: #f8fafc;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    }
-
-    /* Header Section */
-    .et-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: clamp(24px, 6vw, 40px);
-        flex-wrap: wrap;
-        gap: 20px;
-    }
-
-    .et-header h1 {
-        font-size: clamp(24px, 6vw, 32px);
-        font-weight: 700;
-        color: #0b3558;
-        margin-bottom: 8px;
-    }
-
-    .et-header p {
-        font-size: clamp(13px, 3.5vw, 15px);
-        color: #6b7280;
-    }
-
-    /* Buttons */
-    .btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 10px 20px;
-        border-radius: 10px;
-        font-weight: 500;
-        font-size: 14px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        text-decoration: none;
-        border: none;
-        font-family: inherit;
-    }
-
-    .btn-primary {
-        background: #006bff;
-        color: white;
-    }
-
-    .btn-primary:hover {
-        background: #0052cc;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0, 107, 255, 0.3);
-    }
-
-    .btn-ghost {
-        background: transparent;
-        color: #4b5563;
-        padding: 6px 12px;
-        font-size: 13px;
-    }
-
-    .btn-ghost:hover {
-        background: #f3f4f6;
-        color: #006bff;
-    }
-
-    .btn-sm {
-        padding: 6px 12px;
-        font-size: 12px;
-    }
-
-    .btn-danger-text {
-        color: #dc2626;
-    }
-
-    .btn-danger-text:hover {
-        background: #fee2e2;
-        color: #dc2626;
-    }
-
-    /* Empty State */
-    .empty-state {
-        text-align: center;
-        padding: clamp(40px, 10vw, 80px) 20px;
-        background: white;
-        border-radius: 20px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    }
-
-    .empty-state svg {
-        color: #9ca3af;
-        margin-bottom: 16px;
-    }
-
-    .empty-state h3 {
-        font-size: clamp(18px, 5vw, 20px);
-        color: #374151;
-        margin-bottom: 8px;
-    }
-
-    .empty-state p {
-        color: #6b7280;
-        margin-bottom: 24px;
-    }
-
-    /* Loading Spinner */
-    .page-loading {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-    }
-
-    .spinner {
-        width: 40px;
-        height: 40px;
-        border: 3px solid #e5e7eb;
-        border-top-color: #006bff;
-        border-radius: 50%;
-        animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin {
-        to { transform: rotate(360deg); }
-    }
-
-    /* Event Types Grid */
-    .et-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(min(380px, 100%), 1fr));
-        gap: clamp(16px, 4vw, 24px);
-    }
-
-    /* Event Card */
-    .et-card {
-        background: white;
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
-        position: relative;
-    }
-
-    .et-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.15);
-    }
-
-    .et-card-inactive {
-        opacity: 0.7;
-        background: #f9fafb;
-    }
-
-    .et-card-color {
-        height: 4px;
-        width: 100%;
-    }
-
-    .et-card-body {
-        padding: clamp(16px, 4vw, 20px);
-    }
-
-    .et-card-top {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        margin-bottom: 12px;
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-
-    .et-card-top h3 {
-        font-size: clamp(16px, 4vw, 18px);
-        font-weight: 600;
-        color: #0b3558;
-        margin: 0;
-    }
-
-    .et-card-desc {
-        font-size: 13px;
-        color: #6b7280;
-        margin-bottom: 16px;
-        line-height: 1.5;
-    }
-
-    .et-card-details {
-        display: flex;
-        gap: 16px;
-        margin-bottom: 16px;
-        flex-wrap: wrap;
-    }
-
-    .et-card-details span {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 13px;
-        color: #4b5563;
-    }
-
-    .et-card-days {
-        display: flex;
-        gap: 8px;
-        margin-bottom: 12px;
-        flex-wrap: wrap;
-    }
-
-    .day-chip {
-        padding: 4px 10px;
-        background: #f3f4f6;
-        border-radius: 20px;
-        font-size: 11px;
-        font-weight: 500;
-        color: #4b5563;
-    }
-
-    .et-card-time {
-        font-size: 13px;
-        color: #006bff;
-        font-weight: 500;
-        margin-bottom: 12px;
-    }
-
-    .et-card-meta {
-        font-size: 12px;
-        color: #9ca3af;
-        margin-bottom: 16px;
-        padding-top: 12px;
-        border-top: 1px solid #e5e7eb;
-    }
-
-    .et-card-actions {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-    }
-
-    /* Status Badge */
-    .status-badge {
-        display: inline-flex;
-        align-items: center;
-        padding: 4px 10px;
-        border-radius: 20px;
-        font-size: 11px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    .status-cancelled {
-        background: #fee2e2;
-        color: #dc2626;
-    }
-
-    /* Responsive Breakpoints */
-    @media (max-width: 1024px) {
-        .et-grid {
-            grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
-        }
-    }
-
-    @media (max-width: 768px) {
-        .et-page {
-            padding: 20px;
-        }
-
-        .et-header {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .et-header .btn-primary {
-            width: 100%;
-            justify-content: center;
-        }
-
-        .et-grid {
-            grid-template-columns: 1fr;
-            gap: 16px;
-        }
-
-        .et-card-actions {
-            flex-direction: column;
-        }
-
-        .et-card-actions .btn {
-            width: 100%;
-            justify-content: center;
-        }
-
-        .et-card-top {
-            flex-direction: column;
-        }
-
-        .et-card-details {
-            flex-direction: column;
-            gap: 8px;
-        }
-    }
-
-    @media (max-width: 640px) {
-        .et-page {
-            padding: 16px;
-        }
-
-        .et-header h1 {
-            font-size: 24px;
-        }
-
-        .et-header p {
-            font-size: 13px;
-        }
-
-        .et-card-body {
-            padding: 16px;
-        }
-
-        .et-card-top h3 {
-            font-size: 16px;
-        }
-
-        .et-card-desc {
-            font-size: 12px;
-        }
-
-        .et-card-details span {
-            font-size: 12px;
-        }
-
-        .day-chip {
-            padding: 3px 8px;
-            font-size: 10px;
-        }
-
-        .et-card-time {
-            font-size: 12px;
-        }
-
-        .btn {
-            padding: 8px 16px;
-            font-size: 13px;
-        }
-
-        .btn-sm {
-            padding: 6px 12px;
-            font-size: 12px;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .et-page {
-            padding: 12px;
-        }
-
-        .empty-state {
-            padding: 40px 16px;
-        }
-
-        .empty-state svg {
-            width: 32px;
-            height: 32px;
-        }
-
-        .empty-state h3 {
-            font-size: 18px;
-        }
-
-        .empty-state p {
-            font-size: 13px;
-        }
-
-        .et-card-actions {
-            gap: 6px;
-        }
-
-        .et-card-actions .btn {
-            padding: 6px 12px;
-            font-size: 11px;
-        }
-
-        .et-card-details span {
-            font-size: 11px;
-        }
-    }
-
-    /* Dark mode support (optional) */
-    @media (prefers-color-scheme: dark) {
-        .et-page {
-            background: #0f172a;
-        }
-
-        .et-header h1 {
-            color: #f1f5f9;
-        }
-
-        .et-card {
-            background: #1e293b;
-        }
-
-        .et-card-top h3 {
-            color: #f1f5f9;
-        }
-
-        .et-card-desc,
-        .et-card-details span,
-        .et-card-meta {
-            color: #94a3b8;
-        }
-
-        .day-chip {
-            background: #334155;
-            color: #cbd5e1;
-        }
-
-        .btn-ghost {
-            color: #cbd5e1;
-        }
-
-        .btn-ghost:hover {
-            background: #334155;
-        }
-
-        .empty-state {
-            background: #1e293b;
-        }
-
-        .empty-state h3 {
-            color: #f1f5f9;
-        }
-
-        .empty-state p {
-            color: #94a3b8;
-        }
-    }
-
-    /* Print styles */
-    @media print {
-        .et-page {
-            padding: 0;
-            background: white;
-        }
-
-        .et-card {
-            break-inside: avoid;
-            box-shadow: none;
-            border: 1px solid #e5e7eb;
-        }
-
-        .et-card-actions {
-            display: none;
-        }
-    }
+const dashboardStyles = `
+  :root {
+    --primary-blue: #006bff;
+    --text-dark: #0b3558;
+    --text-gray: #667085;
+    --border-color: #e5e7eb;
+    --sidebar-width: 240px;
+  }
+
+  .calendly-container {
+    display: flex;
+    min-height: 100vh;
+    background: #ffffff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  /* SIDEBAR STYLING */
+  .sidebar {
+    width: var(--sidebar-width);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+    position: fixed;
+    height: 100vh;
+  }
+
+  .sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 20px 24px;
+  }
+
+  .logo-icon {
+    width: 28px;
+    height: 28px;
+    background: var(--primary-blue);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  .logo-text {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--primary-blue);
+    letter-spacing: -0.5px;
+  }
+
+  .btn-sidebar-create {
+    margin: 0 20px 20px;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--text-dark);
+  }
+
+  .sidebar-nav { flex: 1; }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 24px;
+    font-size: 14px;
+    color: #475467;
+    cursor: pointer;
+  }
+
+  .nav-item.active {
+    background: #f1f5f9;
+    color: var(--primary-blue);
+    font-weight: 600;
+    border-left: 3px solid var(--primary-blue);
+    padding-left: 21px;
+  }
+
+  .sidebar-footer {
+    border-top: 1px solid var(--border-color);
+    padding-top: 10px;
+  }
+
+  .coin-icon {
+    width: 18px;
+    height: 18px;
+    background: #eee;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+  }
+
+  /* MAIN CONTENT STYLING */
+  .main-content {
+    margin-left: var(--sidebar-width);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .top-header {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 32px;
+  }
+
+  .header-right { display: flex; align-items: center; gap: 20px; }
+
+  .user-profile {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-gray);
+    cursor: pointer;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    background: #e2e8f0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+    color: #475467;
+  }
+
+  .btn-header-create {
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 24px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+
+  .content-inner {
+    padding: 0 32px 40px;
+    max-width: 1000px;
+  }
+
+  .page-title h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 24px;
+  }
+
+  .info-icon { font-size: 18px; color: #98a2b3; }
+
+  .tab-navigation {
+    display: flex;
+    gap: 24px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 24px;
+  }
+
+  .tab {
+    background: none;
+    border: none;
+    padding: 12px 0;
+    font-size: 14px;
+    color: var(--text-gray);
+    cursor: pointer;
+    position: relative;
+  }
+
+  .tab.active {
+    color: var(--text-dark);
+    font-weight: 600;
+  }
+
+  .tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--primary-blue);
+  }
+
+  .search-bar {
+    position: relative;
+    width: 350px;
+    margin-bottom: 24px;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #98a2b3;
+  }
+
+  .search-bar input {
+    width: 100%;
+    padding: 8px 12px 8px 38px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+  }
+
+  .user-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    margin-bottom: 16px;
+  }
+
+  .user-identity { display: flex; align-items: center; gap: 10px; }
+  .small-avatar {
+    width: 24px;
+    height: 24px;
+    background: #f2f4f7;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .user-name { font-size: 14px; font-weight: 500; }
+
+  .view-landing-page {
+    color: var(--primary-blue);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+  }
+
+  .more-icon { color: #667085; margin-left: 12px; }
+
+  /* EVENT ROW CARD STYLING */
+  .event-row-card {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    display: flex;
+    overflow: hidden;
+    margin-bottom: 12px;
+    background: white;
+  }
+
+  .accent-bar { width: 6px; }
+  .accent-bar.purple { background: #8145f4; }
+
+  .card-inner {
+    flex: 1;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .card-left { display: flex; gap: 16px; align-items: flex-start; }
+  .custom-checkbox {
+    width: 18px;
+    height: 18px;
+    margin-top: 4px;
+    border: 1px solid #d0d5dd;
+    border-radius: 4px;
+  }
+
+  .event-details h3 { font-size: 16px; font-weight: 700; margin: 0 0 4px; }
+  .event-details p { font-size: 13px; color: var(--text-gray); margin: 0 0 4px; }
+  .availability { font-size: 13px; color: var(--text-gray); }
+
+  .card-right { display: flex; align-items: center; gap: 12px; }
+
+  .btn-copy-link {
+    background: white;
+    border: 1px solid var(--border-color);
+    padding: 8px 16px;
+    border-radius: 24px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+
+  .more-dots { color: var(--text-gray); font-size: 20px; cursor: pointer; }
+
+  /* Responsive Fixes */
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .main-content { margin-left: 0; }
+    .search-bar { width: 100%; }
+  }
 `;
