@@ -244,7 +244,7 @@ const styles = {
     padding: '40px 48px',
     background: '#f8fafc',
     minHeight: '100vh',
-    fontFamily: "'Inter', system-ui, -apple-system, sans-serif"
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
   },
   backButton: {
     background: 'none',
@@ -263,17 +263,14 @@ const styles = {
     marginBottom: '36px'
   },
   headerTitle: {
-    fontSize: '2.2rem',
+    fontSize: '24px',
     fontWeight: '700',
-    background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
-    backgroundClip: 'text',
-    WebkitBackgroundClip: 'text',
-    color: 'transparent',
+    color: '#0b3558',
     letterSpacing: '-0.01em',
     marginBottom: '8px'
   },
   headerSubtitle: {
-    color: '#475569',
+    color: '#667085',
     fontSize: '1rem',
     borderLeft: '3px solid #006bff',
     paddingLeft: '14px',
@@ -300,12 +297,12 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     gap: '10px',
-    color: '#0f172a'
+    color: '#0b3558'
   },
   label: {
     fontSize: '0.85rem',
     fontWeight: '600',
-    color: '#334155',
+    color: '#0b3558',
     display: 'block',
     marginBottom: '6px',
     marginTop: '4px'
@@ -365,7 +362,7 @@ const styles = {
     background: '#ffffff',
     cursor: 'pointer',
     transition: 'all 0.2s ease',
-    color: '#1e293b'
+    color: '#0b3558'
   },
   dayChipActive: {
     background: '#006bff',
@@ -390,7 +387,7 @@ const styles = {
     border: '2px solid transparent'
   },
   colorDotActive: {
-    border: '3px solid #1e293b',
+    border: '3px solid #0b3558',
     boxShadow: '0 0 0 2px white, 0 0 0 5px #006bff',
     transform: 'scale(1.02)'
   },
@@ -422,7 +419,7 @@ const styles = {
   previewEventName: {
     fontSize: '1.2rem',
     fontWeight: '700',
-    color: '#0f172a',
+    color: '#0b3558',
     marginTop: '4px'
   },
   previewColorBar: {
@@ -444,11 +441,11 @@ const styles = {
     gap: '12px',
     padding: '10px 0',
     fontSize: '0.9rem',
-    color: '#1e293b',
+    color: '#0b3558',
     borderBottom: '1px solid #f1f5f9'
   },
   previewDescription: {
-    color: '#475569',
+    color: '#667085',
     lineHeight: '1.4'
   },
   timeSlotContainer: {
@@ -461,7 +458,7 @@ const styles = {
     fontSize: '0.75rem',
     fontWeight: '600',
     textTransform: 'uppercase',
-    color: '#64748b',
+    color: '#667085',
     marginBottom: '12px',
     display: 'flex',
     alignItems: 'center',
@@ -478,7 +475,7 @@ const styles = {
     borderRadius: '30px',
     fontSize: '0.8rem',
     fontWeight: '500',
-    color: '#0f172a',
+    color: '#0b3558',
     border: '1px solid #e2e8f0',
     cursor: 'default'
   },
@@ -507,7 +504,7 @@ const styles = {
   },
   secondaryButton: {
     background: 'white',
-    color: '#1e293b',
+    color: '#0b3558',
     padding: '12px 20px',
     borderRadius: '40px',
     border: '1px solid #cbd5e1',

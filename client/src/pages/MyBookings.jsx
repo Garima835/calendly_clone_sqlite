@@ -326,8 +326,10 @@ const styles = `
 
     .bookings-page {
         min-height: 100vh;
-        background: linear-gradient(135deg, #f5f7fa 0%, #f8fafc 100%);
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
+        max-width: 1400px;
+        margin: 0 auto;
+        background: #f8fafc;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         padding: 32px 40px;
     }
 
@@ -345,7 +347,7 @@ const styles = `
         width: 48px;
         height: 48px;
         border: 3px solid #e2e8f0;
-        border-top-color: #6366f1;
+        border-top-color: #006bff;
         border-radius: 50%;
         animation: spin 0.8s linear infinite;
     }
@@ -373,26 +375,22 @@ const styles = `
     }
 
     .page-title {
-        font-size: 32px;
+        font-size: 24px;
         font-weight: 700;
-        background: linear-gradient(135deg, #0f172a, #1e293b);
-        background-clip: text;
-        -webkit-background-clip: text;
-        color: transparent;
+        color: #0b3558;
         display: flex;
         align-items: center;
-        gap: 12px;
-        letter-spacing: -0.02em;
+        gap: 8px;
     }
 
     .title-icon {
-        color: #6366f1;
-        font-size: 32px;
+        color: #006bff;
+        font-size: 24px;
     }
 
     .page-subtitle {
         font-size: 15px;
-        color: #64748b;
+        color: #667085;
         margin-top: 8px;
     }
 
@@ -463,12 +461,12 @@ const styles = `
     .stat-value {
         font-size: 28px;
         font-weight: 700;
-        color: #0f172a;
+        color: #0b3558;
     }
 
     .stat-label {
         font-size: 13px;
-        color: #64748b;
+        color: #667085;
         font-weight: 500;
     }
 
@@ -518,16 +516,15 @@ const styles = `
     }
 
     .filter-chip:hover {
-        border-color: #6366f1;
-        color: #6366f1;
+        border-color: #006bff;
+        color: #006bff;
         transform: translateY(-1px);
     }
 
     .filter-chip.active {
-        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        background: #006bff;
         color: white;
         border-color: transparent;
-        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
     }
 
     .filter-indicator {
@@ -558,21 +555,21 @@ const styles = `
     .empty-state h3 {
         font-size: 20px;
         font-weight: 600;
-        color: #0f172a;
+        color: #0b3558;
         margin-bottom: 8px;
     }
 
     .empty-state p {
         font-size: 14px;
-        color: #64748b;
+        color: #667085;
         margin-bottom: 24px;
     }
 
     .empty-action {
-        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        background: #006bff;
         color: white;
         border: none;
-        padding: 12px 28px;
+        padding: 10px 24px;
         border-radius: 40px;
         font-weight: 600;
         cursor: pointer;
@@ -580,8 +577,7 @@ const styles = `
     }
 
     .empty-action:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+        background: #005ce6;
     }
 
     /* Bookings List */
@@ -705,7 +701,7 @@ const styles = `
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #6366f1;
+        color: #006bff;
         font-size: 16px;
     }
 
@@ -734,7 +730,7 @@ const styles = `
     .time-range {
         font-size: 13px;
         font-weight: 400;
-        color: #6366f1;
+        color: #006bff;
         margin-top: 2px;
         display: inline-block;
     }

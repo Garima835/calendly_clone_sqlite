@@ -179,19 +179,21 @@ const dashboardStyles = `
   .calendly-container {
     display: flex;
     min-height: 100vh;
-    background: #ffffff;
+    max-width: 1400px;
+    margin: 0 auto;
+    background: #f8fafc;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   }
 
   /* SIDEBAR STYLING */
-  .sidebar {
+  .calendly-container .sidebar {
     width: var(--sidebar-width);
+    min-width: var(--sidebar-width);
     border-right: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
     padding: 20px 0;
-    position: fixed;
-    height: 100vh;
+    min-height: calc(100vh - var(--nav-height, 64px));
   }
 
   .sidebar-logo {
@@ -273,11 +275,11 @@ const dashboardStyles = `
   }
 
   /* MAIN CONTENT STYLING */
-  .main-content {
-    margin-left: var(--sidebar-width);
+  .calendly-container .main-content {
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-width: 0;
   }
 
   .top-header {
@@ -483,8 +485,8 @@ const dashboardStyles = `
 
   /* Responsive Fixes */
   @media (max-width: 768px) {
-    .sidebar { display: none; }
-    .main-content { margin-left: 0; }
+    .calendly-container .sidebar { display: none; }
+    .calendly-container .main-content { margin-left: 0; }
     .search-bar { width: 100%; }
   }
 `;

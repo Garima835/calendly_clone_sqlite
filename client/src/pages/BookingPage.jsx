@@ -105,7 +105,9 @@ export default function BookingPage() {
             .calendly-layout {
                 display: flex;
                 height: 100vh;
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI';
+                max-width: 1400px;
+                margin: 0 auto;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
                 background: #f8fafc;
             }
 
@@ -164,8 +166,8 @@ export default function BookingPage() {
             }
 
             .topbar h1 {
-                font-size: 22px;
-                color: #111827;
+                font-size: 24px;
+                color: #0b3558;
             }
 
             .create-btn {
@@ -253,6 +255,7 @@ export default function BookingPage() {
             .event-left h3 {
                 margin: 0;
                 font-size: 16px;
+                color: #0b3558;
             }
 
             .event-left p {
@@ -263,7 +266,7 @@ export default function BookingPage() {
 
             .event-left span {
                 font-size: 12px;
-                color: #9ca3af;
+                color: #667085;
             }
 
             .copy-btn {

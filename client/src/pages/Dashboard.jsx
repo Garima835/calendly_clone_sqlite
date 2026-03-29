@@ -5,7 +5,8 @@ import API from '../utils/api';
 import { 
     FiPlus, FiClock, FiCalendar, FiUsers, FiX, FiExternalLink, FiCopy, 
     FiMenu, FiBell, FiSearch, FiChevronDown, FiGrid, FiList, FiBarChart2,
-    FiSettings, FiHelpCircle, FiLogOut, FiCheckCircle, FiAlertCircle
+    FiSettings, FiHelpCircle, FiLogOut, FiCheckCircle, FiAlertCircle,
+    FiLink, FiRepeat
 } from 'react-icons/fi';
 import { showToast } from '../utils/toast';
 
@@ -83,51 +84,54 @@ export default function Dashboard() {
                 <FiMenu />
             </button>
 
-            {/* Sidebar */}
-            <div className={`sidebar ${sidebarOpen ? 'sidebar-open' : ''}`}>
-                <div className="sidebar-header">
-                    <div className="logo">
-                        <span className="logo-icon">C</span>
-                        <span className="logo-text">Calendly</span>
-                    </div>
+            {/* --- SIDEBAR --- */}
+            <aside className={`sidebar ${sidebarOpen ? 'sidebar-open' : ''}`}>
+                <div className="sidebar-logo">
+                    <div className="logo-icon">C</div>
+                    <span className="logo-text">Calendly</span>
                     <button className="close-sidebar" onClick={() => setSidebarOpen(false)}>
                         <FiX />
                     </button>
                 </div>
 
+                <button className="btn-sidebar-create" onClick={() => navigate('/event-types/new')}>
+                    <FiPlus /> Create
+                </button>
+
                 <nav className="sidebar-nav">
                     <div className={`nav-item ${activeTab === 'event-types' ? 'active' : ''}`} onClick={() => setActiveTab('event-types')}>
-                        <FiGrid /> Event Types
+                        <FiLink /> Scheduling
                     </div>
                     <div className={`nav-item ${activeTab === 'upcoming' ? 'active' : ''}`} onClick={() => setActiveTab('upcoming')}>
-                        <FiCalendar /> Upcoming
+                        <FiCalendar /> Meetings
                     </div>
                     <div className="nav-item" onClick={() => navigate('/availability')}>
                         <FiClock /> Availability
                     </div>
-                    <div className="nav-item" onClick={() => navigate('/analytics')}>
-                        <FiBarChart2 /> Analytics
-                    </div>
+                    <div className="nav-item"><FiUsers /> Contacts</div>
+                    <div className="nav-item"><FiRepeat /> Workflows</div>
+                    <div className="nav-item"><FiGrid /> Integrations & apps</div>
+                    <div className="nav-item"><FiRepeat /> Routing</div>
                 </nav>
 
                 <div className="sidebar-footer">
-                    <div className="nav-item" onClick={() => navigate('/settings')}>
-                        <FiSettings /> Settings
-                    </div>
+                    <div className="nav-item upgrade"><span className="coin-icon">$</span> Upgrade plan</div>
+                    <div className="nav-item" onClick={() => navigate('/analytics')}><FiBarChart2 /> Analytics</div>
+                    <div className="nav-item" onClick={() => navigate('/settings')}><FiSettings /> Admin center</div>
                     <div className="nav-item" onClick={() => navigate('/help')}>
-                        <FiHelpCircle /> Help
+                        <FiHelpCircle /> Help <FiChevronDown style={{ marginLeft: 'auto' }} />
                     </div>
                     <div className="nav-item logout" onClick={handleLogout}>
                         <FiLogOut /> Logout
                     </div>
                 </div>
-            </div>
+            </aside>
 
             {/* Overlay for mobile */}
             {sidebarOpen && <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)}></div>}
 
-            {/* Main Content */}
-            <div className="main-content">
+            {/* --- MAIN CONTENT --- */}
+            <main className="main-content">
                 {/* Top Bar */}
                 <div className="top-bar">
                     <div className="search-area">
@@ -138,7 +142,7 @@ export default function Dashboard() {
                         <button className="notification-btn">
                             <FiBell />
                         </button>
-                        <div className="user-info">
+                        <div className="user-info" onClick={() => navigate('/profile')}>
                             <div className="user-avatar">
                                 {user?.name?.charAt(0) || 'U'}
                             </div>
@@ -150,6 +154,8 @@ export default function Dashboard() {
                         </div>
                     </div>
                 </div>
+
+                <div className="content-inner">
 
                 {/* Welcome Section */}
                 <div className="welcome-section">
@@ -303,7 +309,8 @@ export default function Dashboard() {
                         )}
                     </div>
                 )}
-            </div>
+                </div>
+            </main>
         </div>
     );
 }
@@ -319,8 +326,10 @@ const dashboardStyles = `
     .dashboard-container {
         display: flex;
         min-height: 100vh;
-        background: linear-gradient(135deg, #f5f7fa 0%, #f8fafc 100%);
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, Helvetica, Arial, sans-serif;
+        max-width: 1400px;
+        margin: 0 auto;
+        background: #f8fafc;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
     /* Loading State */
@@ -348,7 +357,7 @@ const dashboardStyles = `
     /* Mobile Menu Button */
     .mobile-menu-btn {
         position: fixed;
-        top: 20px;
+        top: calc(var(--nav-height, 64px) + 12px);
         left: 20px;
         z-index: 100;
         background: white;
@@ -366,55 +375,52 @@ const dashboardStyles = `
         transform: scale(1.02);
     }
 
-    /* Sidebar - Calendly Style */
-    .sidebar {
-        width: 280px;
-        background: white;
-        border-right: 1px solid #e2e8f0;
+    :root {
+        --primary-blue: #006bff;
+        --text-dark: #0b3558;
+        --text-gray: #667085;
+        --border-color: #e5e7eb;
+        --sidebar-width: 240px;
+    }
+
+    /* SIDEBAR STYLING */
+    .dashboard-container .sidebar {
+        width: var(--sidebar-width);
+        min-width: var(--sidebar-width);
+        border-right: 1px solid var(--border-color);
         display: flex;
         flex-direction: column;
-        position: fixed;
-        height: 100vh;
-        z-index: 200;
+        padding: 20px 0;
+        min-height: calc(100vh - var(--nav-height, 64px));
+        background: white;
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.02);
     }
 
-    .sidebar-header {
-        padding: 28px 24px;
-        border-bottom: 1px solid #f1f5f9;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .logo {
+    .sidebar-logo {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 10px;
+        padding: 0 20px 24px;
     }
 
     .logo-icon {
-        width: 36px;
-        height: 36px;
-        background: linear-gradient(135deg, #006bff, #3b82f6);
+        width: 28px;
+        height: 28px;
+        background: var(--primary-blue);
         color: white;
-        border-radius: 12px;
+        border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-weight: 700;
-        font-size: 20px;
-        box-shadow: 0 4px 10px rgba(0, 107, 255, 0.3);
+        font-weight: bold;
+        font-size: 18px;
     }
 
     .logo-text {
         font-size: 20px;
-        font-weight: 700;
-        background: linear-gradient(135deg, #0f172a, #1e293b);
-        background-clip: text;
-        -webkit-background-clip: text;
-        color: transparent;
+        font-weight: 800;
+        color: var(--primary-blue);
+        letter-spacing: -0.5px;
     }
 
     .close-sidebar {
@@ -424,92 +430,65 @@ const dashboardStyles = `
         cursor: pointer;
         font-size: 20px;
         color: #94a3b8;
-        transition: color 0.2s;
     }
 
-    .close-sidebar:hover {
-        color: #006bff;
-    }
-
-    .sidebar-nav {
-        flex: 1;
-        padding: 24px 16px;
+    .btn-sidebar-create {
+        margin: 0 20px 20px;
+        padding: 10px;
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        background: white;
         display: flex;
-        flex-direction: column;
-        gap: 6px;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-weight: 500;
+        cursor: pointer;
+        color: var(--text-dark);
     }
+
+    .sidebar-nav { flex: 1; }
 
     .nav-item {
         display: flex;
         align-items: center;
-        gap: 14px;
-        padding: 12px 16px;
-        border-radius: 12px;
-        color: #475569;
-        cursor: pointer;
-        transition: all 0.2s ease;
+        gap: 12px;
+        padding: 10px 24px;
         font-size: 14px;
-        font-weight: 500;
-    }
-
-    .nav-item svg {
-        font-size: 18px;
-    }
-
-    .nav-item:hover {
-        background: #f1f5f9;
-        color: #006bff;
-        transform: translateX(4px);
+        color: #475467;
+        cursor: pointer;
     }
 
     .nav-item.active {
-        background: linear-gradient(135deg, #eef4ff, #e0e7ff);
-        color: #006bff;
+        background: #f1f5f9;
+        color: var(--primary-blue);
         font-weight: 600;
+        border-left: 3px solid var(--primary-blue);
+        padding-left: 21px;
     }
 
     .sidebar-footer {
-        padding: 20px 16px;
-        border-top: 1px solid #f1f5f9;
+        border-top: 1px solid var(--border-color);
+        padding-top: 10px;
+    }
+
+    .coin-icon {
+        width: 18px;
+        height: 18px;
+        background: #eee;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+    }
+
+    /* MAIN CONTENT STYLING */
+    .dashboard-container .main-content {
+        flex: 1;
         display: flex;
         flex-direction: column;
-        gap: 6px;
-    }
-
-    .logout {
-        color: #ef4444;
-    }
-
-    .logout:hover {
-        background: #fef2f2;
-        color: #dc2626;
-    }
-
-    /* Sidebar Overlay */
-    .sidebar-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(4px);
-        z-index: 150;
-        display: none;
-        animation: fadeIn 0.2s ease;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    /* Main Content */
-    .main-content {
-        flex: 1;
-        margin-left: 280px;
-        padding: 28px 36px;
-        min-height: 100vh;
+        min-width: 0;
     }
 
     /* Top Bar */
@@ -520,6 +499,7 @@ const dashboardStyles = `
         margin-bottom: 36px;
         flex-wrap: wrap;
         gap: 16px;
+        padding: 20px;
     }
 
     .search-area {
@@ -621,6 +601,22 @@ const dashboardStyles = `
     .user-email {
         font-size: 11px;
         color: #64748b;
+    }
+
+    .content-inner {
+        padding: 0 32px 40px;
+        max-width: 1000px;
+    }
+
+    /* Sidebar Overlay */
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 150;
     }
 
     /* Welcome Section */
@@ -1041,7 +1037,7 @@ const dashboardStyles = `
     }
 
     @media (max-width: 1024px) {
-        .main-content {
+        .dashboard-container .main-content {
             padding: 24px;
         }
         
@@ -1056,6 +1052,11 @@ const dashboardStyles = `
         }
 
         .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 200;
             transform: translateX(-100%);
         }
 
@@ -1071,9 +1072,8 @@ const dashboardStyles = `
             display: block;
         }
 
-        .main-content {
-            margin-left: 0;
-            padding: 80px 20px 20px;
+        .dashboard-container .main-content {
+            padding: 20px;
         }
 
         .top-bar {
