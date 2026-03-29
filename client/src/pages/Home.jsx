@@ -9,7 +9,7 @@ export default function Home() {
       overflow: 'hidden',
       padding: 'clamp(40px, 5vw, 80px) 20px',
       background: 'linear-gradient(135deg, #ffffff 0%, #f8faff 100%)',
-      minHeight: '100vh',
+      minHeight: 'clamp(600px, 100vh, 900px)',
       display: 'flex',
       alignItems: 'center'
     },
@@ -18,17 +18,18 @@ export default function Home() {
       maxWidth: '1400px',
       margin: '0 auto',
       display: 'grid',
-      gridTemplateColumns: '1fr 1fr',
-      gap: 'clamp(40px, 8vw, 80px)',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 500px), 1fr))',
+      gap: 'clamp(30px, 5vw, 80px)',
       alignItems: 'center',
       position: 'relative',
       zIndex: 2,
-      padding: '0 20px'
+      padding: '0 clamp(16px, 4vw, 40px)'
     },
 
     // Left Side - Text Content
     leftContent: {
-      textAlign: 'left'
+      textAlign: 'left',
+      width: '100%'
     },
 
     heroBadge: {
@@ -37,21 +38,21 @@ export default function Home() {
       gap: '8px',
       background: 'linear-gradient(135deg, #e8f0ff 0%, #d4e4ff 100%)',
       color: '#006bff',
-      padding: '8px 20px',
+      padding: 'clamp(6px, 2vw, 8px) clamp(16px, 4vw, 20px)',
       borderRadius: '100px',
-      fontSize: 'clamp(12px, 3vw, 14px)',
+      fontSize: 'clamp(11px, 3vw, 14px)',
       fontWeight: 600,
-      marginBottom: 'clamp(20px, 5vw, 32px)',
+      marginBottom: 'clamp(16px, 4vw, 32px)',
       letterSpacing: '0.5px',
       backdropFilter: 'blur(10px)',
       boxShadow: '0 2px 10px rgba(0, 107, 255, 0.1)'
     },
 
     heroTitle: {
-      fontSize: 'clamp(40px, 6vw, 64px)',
+      fontSize: 'clamp(32px, 6vw, 64px)',
       fontWeight: 800,
       color: '#0b3558',
-      marginBottom: 'clamp(16px, 4vw, 24px)',
+      marginBottom: 'clamp(12px, 3vw, 24px)',
       lineHeight: 1.2,
       letterSpacing: '-0.02em',
       background: 'linear-gradient(135deg, #0b3558 0%, #1e4a76 100%)',
@@ -61,72 +62,76 @@ export default function Home() {
     },
 
     heroSub: {
-      fontSize: 'clamp(16px, 4vw, 18px)',
+      fontSize: 'clamp(14px, 3.5vw, 18px)',
       color: '#4b5563',
-      marginBottom: 'clamp(24px, 6vw, 40px)',
-      maxWidth: '90%',
-      lineHeight: 1.6
+      marginBottom: 'clamp(20px, 5vw, 40px)',
+      maxWidth: 'min(100%, 600px)',
+      lineHeight: 1.5
     },
 
     heroActions: {
       display: 'flex',
       gap: 'clamp(12px, 3vw, 20px)',
-      marginBottom: 'clamp(32px, 6vw, 48px)',
+      marginBottom: 'clamp(24px, 6vw, 48px)',
       flexWrap: 'wrap'
     },
 
     btnPrimary: {
       background: 'linear-gradient(135deg, #006bff 0%, #0052cc 100%)',
       color: 'white',
-      padding: 'clamp(12px, 4vw, 16px) clamp(24px, 6vw, 40px)',
+      padding: 'clamp(10px, 3vw, 16px) clamp(20px, 5vw, 40px)',
       borderRadius: '12px',
       border: 'none',
       fontWeight: 600,
-      fontSize: 'clamp(14px, 4vw, 16px)',
+      fontSize: 'clamp(13px, 3.5vw, 16px)',
       cursor: 'pointer',
       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
       display: 'inline-flex',
       alignItems: 'center',
-      gap: '10px',
+      gap: '8px',
       textDecoration: 'none',
-      boxShadow: '0 4px 15px rgba(0, 107, 255, 0.3)'
+      boxShadow: '0 4px 15px rgba(0, 107, 255, 0.3)',
+      whiteSpace: 'nowrap'
     },
 
     btnOutline: {
       background: 'rgba(255, 255, 255, 0.9)',
       color: '#374151',
-      padding: 'clamp(12px, 4vw, 16px) clamp(24px, 6vw, 40px)',
+      padding: 'clamp(10px, 3vw, 16px) clamp(20px, 5vw, 40px)',
       borderRadius: '12px',
       border: '2px solid #e5e7eb',
       fontWeight: 600,
-      fontSize: 'clamp(14px, 4vw, 16px)',
+      fontSize: 'clamp(13px, 3.5vw, 16px)',
       cursor: 'pointer',
       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
       display: 'inline-flex',
       alignItems: 'center',
-      gap: '10px',
+      gap: '8px',
       textDecoration: 'none',
-      backdropFilter: 'blur(10px)'
+      backdropFilter: 'blur(10px)',
+      whiteSpace: 'nowrap'
     },
 
     heroStats: {
       display: 'flex',
-      gap: 'clamp(20px, 5vw, 40px)',
-      paddingTop: 'clamp(24px, 5vw, 32px)',
+      gap: 'clamp(16px, 4vw, 40px)',
+      paddingTop: 'clamp(20px, 4vw, 32px)',
       borderTop: '1px solid rgba(0, 0, 0, 0.1)',
       flexWrap: 'wrap'
     },
 
     heroStat: {
-      textAlign: 'left'
+      textAlign: 'left',
+      flex: '1',
+      minWidth: '80px'
     },
 
     heroStatStrong: {
       display: 'block',
-      fontSize: 'clamp(24px, 5vw, 32px)',
+      fontSize: 'clamp(20px, 5vw, 32px)',
       fontWeight: 800,
       color: '#006bff',
-      marginBottom: '8px',
+      marginBottom: '4px',
       background: 'linear-gradient(135deg, #006bff 0%, #3b82f6 100%)',
       WebkitBackgroundClip: 'text',
       WebkitTextFillColor: 'transparent',
@@ -134,14 +139,14 @@ export default function Home() {
     },
 
     heroStatSpan: {
-      fontSize: 'clamp(12px, 3vw, 14px)',
+      fontSize: 'clamp(11px, 2.5vw, 14px)',
       color: '#6b7280',
       fontWeight: 500
     },
 
     statDivider: {
       width: '1px',
-      height: 'clamp(40px, 8vw, 60px)',
+      height: 'clamp(30px, 6vw, 60px)',
       background: 'linear-gradient(180deg, transparent, #e5e7eb, transparent)'
     },
 
@@ -150,20 +155,22 @@ export default function Home() {
       position: 'relative',
       display: 'flex',
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
+      width: '100%'
     },
 
     gradientContainer: {
       position: 'relative',
       display: 'flex',
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
+      width: '100%'
     },
 
     outerGlow: {
       position: 'absolute',
-      width: 'clamp(300px, 40vw, 500px)',
-      height: 'clamp(300px, 40vw, 500px)',
+      width: 'clamp(250px, 50vw, 500px)',
+      height: 'clamp(250px, 50vw, 500px)',
       background: 'radial-gradient(circle, rgba(0, 107, 255, 0.4) 0%, rgba(147, 51, 234, 0.3) 50%, transparent 70%)',
       borderRadius: '50%',
       filter: 'blur(60px)',
@@ -172,8 +179,8 @@ export default function Home() {
 
     innerGlow: {
       position: 'absolute',
-      width: 'clamp(320px, 42vw, 520px)',
-      height: 'clamp(320px, 42vw, 520px)',
+      width: 'clamp(270px, 52vw, 520px)',
+      height: 'clamp(270px, 52vw, 520px)',
       background: 'radial-gradient(circle, rgba(147, 51, 234, 0.4) 0%, rgba(0, 107, 255, 0.3) 50%, transparent 70%)',
       borderRadius: '50%',
       filter: 'blur(50px)',
@@ -184,63 +191,66 @@ export default function Home() {
       position: 'relative',
       zIndex: 10,
       background: 'white',
-      borderRadius: '32px',
-      padding: 'clamp(20px, 4vw, 32px)',
+      borderRadius: 'clamp(20px, 5vw, 32px)',
+      padding: 'clamp(16px, 4vw, 32px)',
       boxShadow: '0 30px 60px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.2) inset',
       transform: 'rotate(2deg)',
       transition: 'transform 0.3s ease',
       width: '100%',
-      maxWidth: '450px'
+      maxWidth: 'min(100%, 450px)',
+      margin: '0 auto'
     },
 
     calendarHeader: {
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginBottom: '24px',
-      paddingBottom: '16px',
-      borderBottom: '1px solid #e5e7eb'
+      marginBottom: 'clamp(16px, 4vw, 24px)',
+      paddingBottom: 'clamp(12px, 3vw, 16px)',
+      borderBottom: '1px solid #e5e7eb',
+      flexWrap: 'wrap',
+      gap: '10px'
     },
 
     calendarMonth: {
-      fontSize: 'clamp(16px, 4vw, 18px)',
+      fontSize: 'clamp(14px, 4vw, 18px)',
       fontWeight: 600,
       color: '#0b3558'
     },
 
     calendarNav: {
       display: 'flex',
-      gap: '16px',
+      gap: 'clamp(12px, 3vw, 16px)',
       color: '#9ca3af'
     },
 
     calendarWeekdays: {
       display: 'grid',
       gridTemplateColumns: 'repeat(7, 1fr)',
-      gap: '8px',
-      marginBottom: '16px'
+      gap: 'clamp(4px, 1.5vw, 8px)',
+      marginBottom: 'clamp(12px, 3vw, 16px)'
     },
 
     weekday: {
       textAlign: 'center',
-      fontSize: 'clamp(11px, 2.5vw, 13px)',
+      fontSize: 'clamp(10px, 2.5vw, 13px)',
       fontWeight: 500,
       color: '#6b7280',
-      padding: '8px 0'
+      padding: 'clamp(4px, 1.5vw, 8px) 0'
     },
 
     calendarDays: {
       display: 'grid',
       gridTemplateColumns: 'repeat(7, 1fr)',
-      gap: '8px',
-      marginBottom: '20px'
+      gap: 'clamp(4px, 1.5vw, 8px)',
+      marginBottom: 'clamp(16px, 4vw, 20px)'
     },
 
     day: {
       textAlign: 'center',
-      padding: 'clamp(8px, 2vw, 12px)',
-      fontSize: 'clamp(12px, 3vw, 14px)',
-      borderRadius: '12px',
+      padding: 'clamp(6px, 2vw, 12px)',
+      fontSize: 'clamp(11px, 2.5vw, 14px)',
+      borderRadius: 'clamp(8px, 2vw, 12px)',
       cursor: 'pointer',
       transition: 'all 0.2s',
       color: '#374151'
@@ -258,28 +268,28 @@ export default function Home() {
     },
 
     timeSlots: {
-      marginTop: '20px',
-      paddingTop: '16px',
+      marginTop: 'clamp(16px, 4vw, 20px)',
+      paddingTop: 'clamp(12px, 3vw, 16px)',
       borderTop: '1px solid #e5e7eb'
     },
 
     timeSlotsTitle: {
-      fontSize: '14px',
+      fontSize: 'clamp(12px, 3vw, 14px)',
       fontWeight: 500,
       color: '#374151',
-      marginBottom: '12px'
+      marginBottom: 'clamp(10px, 2.5vw, 12px)'
     },
 
     slotsGrid: {
       display: 'grid',
-      gridTemplateColumns: 'repeat(3, 1fr)',
-      gap: '8px'
+      gridTemplateColumns: 'repeat(auto-fit, minmax(min(70px, 100%), 1fr))',
+      gap: 'clamp(6px, 2vw, 8px)'
     },
 
     slot: {
-      padding: '8px',
+      padding: 'clamp(6px, 2vw, 8px)',
       textAlign: 'center',
-      fontSize: '12px',
+      fontSize: 'clamp(10px, 2.5vw, 12px)',
       border: '1px solid #e5e7eb',
       borderRadius: '8px',
       cursor: 'pointer',
@@ -290,7 +300,7 @@ export default function Home() {
 
     // Features Section - Centered
     featuresSection: {
-      padding: 'clamp(60px, 10vw, 100px) 20px',
+      padding: 'clamp(50px, 10vw, 100px) 20px',
       background: 'linear-gradient(180deg, #ffffff 0%, #fafcff 100%)',
       textAlign: 'center'
     },
@@ -299,41 +309,41 @@ export default function Home() {
       display: 'inline-flex',
       alignItems: 'center',
       gap: '8px',
-      fontSize: 'clamp(12px, 3vw, 13px)',
+      fontSize: 'clamp(11px, 2.5vw, 13px)',
       fontWeight: 600,
       textTransform: 'uppercase',
       letterSpacing: '1.5px',
       color: '#006bff',
       background: 'linear-gradient(135deg, #e8f0ff 0%, #d4e4ff 100%)',
-      padding: '8px 20px',
+      padding: 'clamp(6px, 2vw, 8px) clamp(16px, 4vw, 20px)',
       borderRadius: '100px',
       marginBottom: 'clamp(16px, 4vw, 24px)',
-      display: 'inline-flex',
       justifyContent: 'center'
     },
 
     featuresTitle: {
-      fontSize: 'clamp(28px, 6vw, 48px)',
+      fontSize: 'clamp(24px, 6vw, 48px)',
       fontWeight: 800,
       color: '#0b3558',
       marginBottom: 'clamp(32px, 6vw, 56px)',
       letterSpacing: '-0.02em',
       lineHeight: 1.2,
-      textAlign: 'center'
+      textAlign: 'center',
+      padding: '0 16px'
     },
 
     featuresGrid: {
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))',
-      gap: 'clamp(24px, 4vw, 40px)',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))',
+      gap: 'clamp(20px, 4vw, 40px)',
       maxWidth: 'min(1400px, 95%)',
       margin: '0 auto',
-      padding: '0 20px'
+      padding: '0 16px'
     },
 
     featureCard: {
       textAlign: 'center',
-      padding: 'clamp(28px, 5vw, 40px) clamp(20px, 4vw, 32px)',
+      padding: 'clamp(24px, 5vw, 40px) clamp(16px, 4vw, 32px)',
       background: 'white',
       borderRadius: '24px',
       transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -341,59 +351,60 @@ export default function Home() {
     },
 
     featureIcon: {
-      width: 'clamp(70px, 12vw, 80px)',
-      height: 'clamp(70px, 12vw, 80px)',
+      width: 'clamp(60px, 12vw, 80px)',
+      height: 'clamp(60px, 12vw, 80px)',
       background: 'linear-gradient(135deg, #e8f0ff 0%, #d4e4ff 100%)',
       borderRadius: '24px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      margin: '0 auto 24px',
-      fontSize: 'clamp(32px, 6vw, 40px)',
+      margin: '0 auto 20px',
+      fontSize: 'clamp(28px, 6vw, 40px)',
       color: '#006bff'
     },
 
     featureCardTitle: {
-      fontSize: 'clamp(20px, 4vw, 24px)',
+      fontSize: 'clamp(18px, 4vw, 24px)',
       fontWeight: 700,
       color: '#0b3558',
       marginBottom: '12px'
     },
 
     featureCardDesc: {
-      fontSize: 'clamp(14px, 3vw, 16px)',
+      fontSize: 'clamp(13px, 3vw, 16px)',
       color: '#6b7280',
       lineHeight: 1.6
     },
 
     // How It Works Section - Centered
     howSection: {
-      padding: 'clamp(60px, 10vw, 100px) 20px',
+      padding: 'clamp(50px, 10vw, 100px) 20px',
       background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
       textAlign: 'center'
     },
 
     howTitle: {
-      fontSize: 'clamp(28px, 6vw, 48px)',
+      fontSize: 'clamp(24px, 6vw, 48px)',
       fontWeight: 800,
       color: '#0b3558',
       marginBottom: 'clamp(32px, 6vw, 56px)',
       letterSpacing: '-0.02em',
-      textAlign: 'center'
+      textAlign: 'center',
+      padding: '0 16px'
     },
 
     stepsGrid: {
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))',
-      gap: 'clamp(24px, 4vw, 40px)',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))',
+      gap: 'clamp(20px, 4vw, 40px)',
       maxWidth: 'min(1200px, 95%)',
       margin: '0 auto',
-      padding: '0 20px'
+      padding: '0 16px'
     },
 
     stepCard: {
       textAlign: 'center',
-      padding: 'clamp(28px, 5vw, 40px) clamp(20px, 4vw, 32px)',
+      padding: 'clamp(24px, 5vw, 40px) clamp(16px, 4vw, 32px)',
       background: 'white',
       borderRadius: '24px',
       boxShadow: '0 10px 30px rgba(0, 0, 0, 0.05)',
@@ -401,29 +412,29 @@ export default function Home() {
     },
 
     stepNumber: {
-      width: 'clamp(60px, 10vw, 70px)',
-      height: 'clamp(60px, 10vw, 70px)',
+      width: 'clamp(50px, 10vw, 70px)',
+      height: 'clamp(50px, 10vw, 70px)',
       background: 'linear-gradient(135deg, #006bff 0%, #3b82f6 100%)',
       color: 'white',
-      fontSize: 'clamp(28px, 6vw, 32px)',
+      fontSize: 'clamp(24px, 6vw, 32px)',
       fontWeight: 800,
       borderRadius: '50%',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      margin: '0 auto 24px',
+      margin: '0 auto 20px',
       boxShadow: '0 8px 20px rgba(0, 107, 255, 0.3)'
     },
 
     stepCardTitle: {
-      fontSize: 'clamp(20px, 4vw, 24px)',
+      fontSize: 'clamp(18px, 4vw, 24px)',
       fontWeight: 700,
       color: '#0b3558',
       marginBottom: '12px'
     },
 
     stepCardDesc: {
-      fontSize: 'clamp(14px, 3vw, 16px)',
+      fontSize: 'clamp(13px, 3vw, 16px)',
       color: '#6b7280',
       lineHeight: 1.6
     },
@@ -431,7 +442,7 @@ export default function Home() {
     // CTA Section - Centered
     ctaSection: {
       position: 'relative',
-      padding: 'clamp(60px, 10vw, 100px) 20px',
+      padding: 'clamp(50px, 10vw, 100px) 20px',
       background: 'linear-gradient(135deg, #0b3558 0%, #1a4d7a 50%, #2b5f8a 100%)',
       textAlign: 'center',
       overflow: 'hidden'
@@ -439,8 +450,8 @@ export default function Home() {
 
     ctaGlow: {
       position: 'absolute',
-      width: 'clamp(400px, 60vw, 700px)',
-      height: 'clamp(400px, 60vw, 700px)',
+      width: 'clamp(300px, 60vw, 700px)',
+      height: 'clamp(300px, 60vw, 700px)',
       background: 'radial-gradient(circle, rgba(0, 107, 255, 0.4) 0%, transparent 70%)',
       borderRadius: '50%',
       top: '-200px',
@@ -453,11 +464,12 @@ export default function Home() {
       position: 'relative',
       zIndex: 2,
       maxWidth: 'min(800px, 95%)',
-      margin: '0 auto'
+      margin: '0 auto',
+      padding: '0 16px'
     },
 
     ctaTitle: {
-      fontSize: 'clamp(28px, 6vw, 48px)',
+      fontSize: 'clamp(24px, 6vw, 48px)',
       fontWeight: 800,
       color: 'white',
       marginBottom: '16px',
@@ -466,9 +478,9 @@ export default function Home() {
     },
 
     ctaDesc: {
-      fontSize: 'clamp(16px, 4vw, 18px)',
+      fontSize: 'clamp(14px, 4vw, 18px)',
       color: 'rgba(255, 255, 255, 0.95)',
-      marginBottom: 'clamp(32px, 6vw, 48px)',
+      marginBottom: 'clamp(24px, 6vw, 48px)',
       lineHeight: 1.6,
       textAlign: 'center'
     },
@@ -476,66 +488,78 @@ export default function Home() {
     ctaChecklist: {
       display: 'flex',
       justifyContent: 'center',
-      gap: 'clamp(20px, 5vw, 40px)',
-      marginBottom: 'clamp(32px, 6vw, 48px)',
+      gap: 'clamp(12px, 4vw, 40px)',
+      marginBottom: 'clamp(24px, 6vw, 48px)',
       flexWrap: 'wrap'
     },
 
     ctaChecklistItem: {
       display: 'flex',
       alignItems: 'center',
-      gap: '10px',
+      gap: '8px',
       color: 'white',
-      fontSize: 'clamp(13px, 3vw, 15px)',
+      fontSize: 'clamp(12px, 3vw, 15px)',
       fontWeight: 500,
-      padding: '8px 16px',
+      padding: '6px 12px',
       background: 'rgba(255, 255, 255, 0.1)',
       borderRadius: '100px',
-      backdropFilter: 'blur(10px)'
+      backdropFilter: 'blur(10px)',
+      whiteSpace: 'nowrap'
     },
 
     ctaButton: {
       background: 'white',
       color: '#006bff',
-      padding: 'clamp(14px, 4vw, 18px) clamp(32px, 8vw, 48px)',
+      padding: 'clamp(12px, 4vw, 18px) clamp(24px, 6vw, 48px)',
       borderRadius: '12px',
       border: 'none',
-      fontSize: 'clamp(15px, 4vw, 18px)',
+      fontSize: 'clamp(14px, 4vw, 18px)',
       fontWeight: 700,
       cursor: 'pointer',
       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
       display: 'inline-flex',
       alignItems: 'center',
-      gap: '12px',
+      gap: '8px',
       textDecoration: 'none',
       boxShadow: '0 8px 25px rgba(0, 0, 0, 0.2)'
     },
 
-    '@media (max-width: 968px)': {
-      heroContainer: {
-        gridTemplateColumns: '1fr',
-        gap: '48px',
-        textAlign: 'center'
-      },
-      leftContent: {
-        textAlign: 'center'
-      },
-      heroSub: {
-        maxWidth: '100%',
-        marginLeft: 'auto',
-        marginRight: 'auto'
-      },
-      heroActions: {
-        justifyContent: 'center'
-      },
+    // Mobile specific adjustments
+    '@media (max-width: 640px)': {
       heroStats: {
-        justifyContent: 'center'
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '16px'
+      },
+      statDivider: {
+        display: 'none'
       },
       heroStat: {
+        textAlign: 'center',
+        width: '100%'
+      },
+      heroActions: {
+        flexDirection: 'column',
+        width: '100%'
+      },
+      btnPrimary: {
+        width: '100%',
+        justifyContent: 'center'
+      },
+      btnOutline: {
+        width: '100%',
+        justifyContent: 'center'
+      },
+      ctaChecklistItem: {
+        whiteSpace: 'normal',
         textAlign: 'center'
       },
-      calendarCard: {
-        margin: '0 auto'
+      calendarDays: {
+        gap: '2px'
+      },
+      day: {
+        padding: '4px',
+        fontSize: '10px'
       }
     }
   };
