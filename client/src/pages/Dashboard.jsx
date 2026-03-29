@@ -1,4 +1,68 @@
-return (
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import API from '../utils/api';
+import { FiPlus, FiClock, FiCalendar, FiUsers, FiX, FiExternalLink, FiCopy } from 'react-icons/fi';
+import { showToast } from '../utils/toast';
+
+export default function Dashboard() {
+    const { user } = useAuth();
+    const navigate = useNavigate();
+    const [stats, setStats] = useState({ total: 0, upcoming: 0, past: 0, cancelled: 0 });
+    const [eventTypes, setEventTypes] = useState([]);
+    const [upcomingBookings, setUpcomingBookings] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        loadData();
+    }, []);
+
+    const loadData = async () => {
+        try {
+            const [statsRes, etRes, bookingsRes] = await Promise.all([
+                API.get('/bookings/stats'),
+                API.get('/event-types'),
+                API.get('/bookings?type=upcoming')
+            ]);
+            setStats(statsRes.data);
+            setEventTypes(etRes.data);
+            setUpcomingBookings(bookingsRes.data.slice(0, 5));
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const copyLink = (username) => {
+        const link = `${window.location.origin}/u/${username}`;
+        navigator.clipboard.writeText(link).then(() => {
+            showToast('Link copied to clipboard!');
+        }).catch(() => {
+            showToast('Failed to copy link', 'error');
+        });
+    };
+
+    const cancelBooking = async (id) => {
+        if (!window.confirm('Are you sure you want to cancel this booking?')) return;
+        try {
+            await API.put(`/bookings/${id}/status`, { status: 'cancelled' });
+            showToast('Booking cancelled');
+            loadData();
+        } catch (error) {
+            showToast(error.response?.data?.message || 'Failed to cancel', 'error');
+        }
+    };
+
+    if (loading) {
+        return (
+            <div className="page-loading">
+                <div className="spinner"></div>
+            </div>
+        );
+    }
+
+    return (
   <div className="dash-wrapper">
 
     {/* LEFT CONTENT */}
@@ -254,3 +318,4 @@ return (
 
   </div>
 );
+}
