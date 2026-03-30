@@ -14,6 +14,13 @@ import MyBookings from './pages/MyBookings';
 import Profile from './pages/Profile';
 import UserProfile from './pages/UserProfile';
 import Availability from './pages/Availability';
+// Add these imports at the top
+import Contacts from './pages/Contacts';
+import Workflows from './pages/Workflows';
+import Integrations from './pages/Integrations';
+import Routing from './pages/Routing';
+
+// Add these routes in your Routes component
 
 function App() {
     return (
@@ -34,6 +41,10 @@ function App() {
                             <Route path="/event-types/:id/edit" element={<ProtectedRoute><CreateEventType /></ProtectedRoute>} />
                             <Route path="/bookings" element={<ProtectedRoute><MyBookings /></ProtectedRoute>} />
                             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                            <Route path="/contacts" element={<ProtectedRoute><Contacts /></ProtectedRoute>} />
+<Route path="/workflows" element={<ProtectedRoute><Workflows /></ProtectedRoute>} />
+<Route path="/integrations" element={<ProtectedRoute><Integrations /></ProtectedRoute>} />
+<Route path="/routing" element={<ProtectedRoute><Routing /></ProtectedRoute>} />
                             <Route path="/availability" element={<Availability />} />
                         </Routes>
                     </main>

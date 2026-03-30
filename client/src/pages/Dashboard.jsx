@@ -108,10 +108,19 @@ export default function Dashboard() {
                     <div className={`nav-item ${activeTab === 'upcoming' ? 'active' : ''}`} onClick={() => setActiveTab('upcoming')}>
                         <FiCalendar /> Meetings
                     </div>
-                    <div className="nav-item"><FiUsers /> Contacts</div>
-                    <div className="nav-item"><FiRepeat /> Workflows</div>
-                    <div className="nav-item"><FiGrid /> Integrations & apps</div>
-                    <div className="nav-item"><FiRepeat /> Routing</div>
+                     
+    <div className="nav-item" onClick={() => navigate('/contacts')}>
+        <FiUsers /> Contacts
+    </div>
+    <div className="nav-item" onClick={() => navigate('/workflows')}>
+        <FiRepeat /> Workflows
+    </div>
+    <div className="nav-item" onClick={() => navigate('/integrations')}>
+        <FiGrid /> Integrations & apps
+    </div>
+    <div className="nav-item" onClick={() => navigate('/routing')}>
+        <FiRepeat /> Routing
+    </div>
                 </nav>
 
                 <div className="sidebar-footer">
