@@ -13,6 +13,7 @@ import BookingPage from './pages/BookingPage';
 import MyBookings from './pages/MyBookings';
 import Profile from './pages/Profile';
 import UserProfile from './pages/UserProfile';
+import Availability from './pages/Availability';
 
 function App() {
     return (
@@ -33,6 +34,7 @@ function App() {
                             <Route path="/event-types/:id/edit" element={<ProtectedRoute><CreateEventType /></ProtectedRoute>} />
                             <Route path="/bookings" element={<ProtectedRoute><MyBookings /></ProtectedRoute>} />
                             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                            <Route path="/availability" element={<Availability />} />
                         </Routes>
                     </main>
                     <Footer />

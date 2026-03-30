@@ -9,6 +9,9 @@ const CalendlyScheduler = () => {
   const [selectedDays, setSelectedDays] = useState(['Mon', 'Wed', 'Fri']);
   const [selectedColor, setSelectedColor] = useState('#006bff');
   const [description, setDescription] = useState('Let\'s align on Q3 roadmap and key initiatives.');
+  const [generatedLink, setGeneratedLink] = useState('');
+  const [showCopyFeedback, setShowCopyFeedback] = useState(false);
+  const [isLinkGenerated, setIsLinkGenerated] = useState(false);
 
   // Available days for selection
   const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -17,6 +20,80 @@ const CalendlyScheduler = () => {
   const colorOptions = [
     '#006bff', '#7c3aed', '#ec489a', '#10b981', '#f59e0b', '#ef4444', '#06b6d4'
   ];
+
+  // Generate a unique meeting link
+  const generateMeetingLink = () => {
+    // Create a unique identifier based on event details and timestamp
+    const eventSlug = eventName
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '');
+    
+    const uniqueId = Math.random().toString(36).substring(2, 10);
+    const timestamp = Date.now().toString(36);
+    
+    // Generate a unique link (in a real app, this would come from your backend)
+    const link = `${window.location.origin}/schedule/${eventSlug}-${uniqueId}-${timestamp}`;
+    
+    return link;
+  };
+
+  // Create event and generate link
+  const handleCreateEvent = () => {
+    if (!eventName.trim()) {
+      alert('Please enter an event name');
+      return;
+    }
+    
+    const newLink = generateMeetingLink();
+    setGeneratedLink(newLink);
+    setIsLinkGenerated(true);
+    
+    const eventData = {
+      eventName,
+      guestEmail,
+      duration: getDurationText(),
+      location: getLocationInfo().text,
+      selectedDays,
+      color: selectedColor,
+      description,
+      meetingLink: newLink,
+      createdAt: new Date().toISOString()
+    };
+    
+    console.log('Event created:', eventData);
+    
+    // In a real app, you would save this to your backend
+    localStorage.setItem(`event_${newLink}`, JSON.stringify(eventData));
+    
+    alert(`✨ Event "${eventName}" created successfully!\nYour meeting link has been generated.`);
+  };
+
+  // Copy link to clipboard
+  const copyToClipboard = async () => {
+    if (!generatedLink) {
+      alert('Please create the event first to generate a link');
+      return;
+    }
+    
+    try {
+      await navigator.clipboard.writeText(generatedLink);
+      setShowCopyFeedback(true);
+      setTimeout(() => setShowCopyFeedback(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+      // Fallback for older browsers
+      const textarea = document.createElement('textarea');
+      textarea.value = generatedLink;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      setShowCopyFeedback(true);
+      setTimeout(() => setShowCopyFeedback(false), 2000);
+    }
+  };
 
   // Toggle day selection
   const toggleDay = (day) => {
@@ -42,19 +119,23 @@ const CalendlyScheduler = () => {
     }
   };
 
-  // Handle scheduling action
+  // Handle scheduling action (deprecated but kept for compatibility)
   const handleSchedule = () => {
-    const eventData = {
-      eventName,
-      guestEmail,
-      duration: getDurationText(),
-      location: getLocationInfo().text,
-      selectedDays,
-      color: selectedColor,
-      description
-    };
-    console.log('Scheduling event:', eventData);
-    alert(`✨ Event "${eventName}" scheduled!\nWe'll send a calendar invite to ${guestEmail || 'your guest'}.\nSelected days: ${selectedDays.join(', ')}`);
+    if (!isLinkGenerated) {
+      handleCreateEvent();
+    } else {
+      const eventData = {
+        eventName,
+        guestEmail,
+        duration: getDurationText(),
+        location: getLocationInfo().text,
+        selectedDays,
+        color: selectedColor,
+        description
+      };
+      console.log('Scheduling event:', eventData);
+      alert(`✨ Event "${eventName}" scheduled!\nWe'll send a calendar invite to ${guestEmail || 'your guest'}.\nSelected days: ${selectedDays.join(', ')}`);
+    }
   };
 
   const locationInfo = getLocationInfo();
@@ -203,6 +284,37 @@ const CalendlyScheduler = () => {
               )}
             </div>
 
+            {/* Generated Link Display */}
+            {isLinkGenerated && generatedLink && (
+              <div style={styles.generatedLinkContainer}>
+                <div style={styles.linkHeader}>
+                  <i className="fas fa-link" style={{ color: selectedColor }}></i>
+                  <span style={styles.linkLabel}>Your meeting link</span>
+                </div>
+                <div style={styles.linkBox}>
+                  <input 
+                    type="text" 
+                    value={generatedLink} 
+                    readOnly 
+                    style={styles.linkInput}
+                  />
+                  <button 
+                    onClick={copyToClipboard} 
+                    style={styles.copyButton}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = '#f0f0f0'}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = 'white'}
+                  >
+                    <i className="fas fa-copy"></i> Copy
+                  </button>
+                </div>
+                {showCopyFeedback && (
+                  <div style={styles.copyFeedback}>
+                    <i className="fas fa-check-circle"></i> Link copied to clipboard!
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Mock time slots (Calendly vibe) */}
             <div style={styles.timeSlotContainer}>
               <div style={styles.timeSlotLabel}>
@@ -218,12 +330,20 @@ const CalendlyScheduler = () => {
 
           {/* Action Buttons */}
           <div style={styles.actions}>
-            <button style={styles.secondaryButton}>
-              Copy link <i className="fas fa-link"></i>
-            </button>
-            <button onClick={handleSchedule} style={styles.primaryButton}>
-              Schedule event <i className="fas fa-arrow-right"></i>
-            </button>
+            {isLinkGenerated ? (
+              <>
+                <button onClick={copyToClipboard} style={styles.secondaryButton}>
+                  Copy link <i className="fas fa-link"></i>
+                </button>
+                <button onClick={handleSchedule} style={styles.primaryButton}>
+                  Schedule event <i className="fas fa-arrow-right"></i>
+                </button>
+              </>
+            ) : (
+              <button onClick={handleCreateEvent} style={styles.primaryButton}>
+                Create event & generate link <i className="fas fa-plus-circle"></i>
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -448,6 +568,58 @@ const styles = {
     color: '#667085',
     lineHeight: '1.4'
   },
+  generatedLinkContainer: {
+    background: '#f8fafc',
+    borderRadius: '18px',
+    padding: '16px',
+    marginBottom: '16px',
+    border: '1px solid #e2e8f0'
+  },
+  linkHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    marginBottom: '12px'
+  },
+  linkLabel: {
+    fontSize: '0.85rem',
+    fontWeight: '600',
+    color: '#0b3558'
+  },
+  linkBox: {
+    display: 'flex',
+    gap: '8px',
+    alignItems: 'center'
+  },
+  linkInput: {
+    flex: 1,
+    padding: '10px 12px',
+    borderRadius: '12px',
+    border: '1px solid #e2e8f0',
+    fontSize: '0.85rem',
+    fontFamily: 'monospace',
+    background: 'white',
+    color: '#0b3558'
+  },
+  copyButton: {
+    padding: '10px 16px',
+    borderRadius: '12px',
+    border: '1px solid #e2e8f0',
+    background: 'white',
+    cursor: 'pointer',
+    fontSize: '0.85rem',
+    fontWeight: '500',
+    color: '#006bff',
+    transition: 'all 0.2s'
+  },
+  copyFeedback: {
+    marginTop: '8px',
+    fontSize: '0.8rem',
+    color: '#10b981',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px'
+  },
   timeSlotContainer: {
     background: '#f8fafc',
     borderRadius: '18px',
@@ -529,9 +701,5 @@ const styles = {
     gap: '8px'
   }
 };
-
-// Add hover effects via component mount (optional but good)
-// To make hover work we need to inject a style tag, but for brevity we use inline interactive states
-// For production you can add a <style> tag in the parent component, but this is fully functional.
 
 export default CalendlyScheduler;

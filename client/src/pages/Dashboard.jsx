@@ -102,11 +102,11 @@ export default function Dashboard() {
                     <div className={`nav-item ${activeTab === 'event-types' ? 'active' : ''}`} onClick={() => setActiveTab('event-types')}>
                         <FiLink /> Scheduling
                     </div>
+                      <div className="nav-item" onClick={() => navigate('/availability')}>
+                      <FiClock /> Availability
+                    </div>
                     <div className={`nav-item ${activeTab === 'upcoming' ? 'active' : ''}`} onClick={() => setActiveTab('upcoming')}>
                         <FiCalendar /> Meetings
-                    </div>
-                    <div className="nav-item" onClick={() => navigate('/availability')}>
-                        <FiClock /> Availability
                     </div>
                     <div className="nav-item"><FiUsers /> Contacts</div>
                     <div className="nav-item"><FiRepeat /> Workflows</div>
